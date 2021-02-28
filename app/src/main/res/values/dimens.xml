@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="weather_dropdown_stroke_width">1dp</dimen>
+    <dimen name="weather_radio_flat_stroke_width">1dp</dimen>
+    <dimen name="weather_dropdown_radius">5dp</dimen>
+    <dimen name="weather_radio_flat_margin">8dp</dimen>
+    <dimen name="weather_radio_button_width">180dp</dimen>
+    <dimen name="weather_radio_button_margin_horizontal">16dp</dimen>
+    <dimen name="weather_radio_button_margin_vertical">3dp</dimen>
+    <dimen name="weather_section_margin_top">12dp</dimen>
+    <dimen name="weather_dropdown_height">45dp</dimen>
+    <dimen name="weather_floating_button_margin_bottom">10dp</dimen>
+    <dimen name="weather_floating_button_margin_end">16dp</dimen>
+    <dimen name="weather_floating_button_max_image_size">40dp</dimen>
+    <dimen name="weather_temp_margin">10dp</dimen>
+    <dimen name="weather_image_tem_diameter">75dp</dimen>
+    <dimen name="weather_floating_button_diameter">50dp</dimen>
+    <dimen name="weather_image_view_error_diameter">100dp</dimen>
+    <dimen name="weather_primary_text_view_error_margin_top">10dp</dimen>
+    <dimen name="weather_primary_text_view_error_margin_horizontal">16dp</dimen>
+    <dimen name="weather_secondary_text_view_error_margin_top">10dp</dimen>
+    <dimen name="weather_location_section_margin_start">2dp</dimen>
+
+    <dimen name="weather_item_city_padding_end">50dp</dimen>
+    <dimen name="weather_item_city_padding_start">15dp</dimen>
+    <dimen name="weather_item_city_padding_vertical">8dp</dimen>
+    <dimen name="weather_item_city_margin_vertical">5dp</dimen>
+    <dimen name="weather_item_city_image_diameter">24dp</dimen>
+
+    <!--Text size-->
+    <dimen name="weather_text_size_x_small">14sp</dimen>
+    <dimen name="weather_text_size_small">16sp</dimen>
+    <dimen name="weather_text_size_medium">18sp</dimen>
+    <dimen name="weather_text_size_extra_large">75sp</dimen>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="@dimen/weather_image_view_error_diameter"
+        android:layout_height="@dimen/weather_image_view_error_diameter"
+        android:src="@drawable/weather_ic_connection_error" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/weather_primary_text_view_error_margin_top"
+        android:layout_marginLeft="@dimen/weather_primary_text_view_error_margin_horizontal"
+        android:layout_marginRight="@dimen/weather_primary_text_view_error_margin_horizontal"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:text="@string/weather_connection_error"
+        android:textSize="@dimen/weather_text_size_medium" />
+
+    <TextView
+        android:id="@+id/tvRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/weather_secondary_text_view_error_margin_top"
+        android:text="@string/weather_retry"
+        android:textColor="@color/weather_colorLink"
+        android:textSize="@dimen/weather_text_size_small">
+    </TextView>
+</LinearLayout>

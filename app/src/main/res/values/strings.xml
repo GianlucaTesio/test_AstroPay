@@ -1,0 +1,18 @@
+<resources>
+    <string name="weather_app_name">Weather</string>
+    <string name="weather_rb_location">Ubicación actual</string>
+    <string name="weather_rb_cities">Seleccionar ciudad</string>
+    <string name="weather_text_location">Ubicación:</string>
+    <string name="weather_temp_max">Máx.: </string>
+    <string name="weather_temp_min">Mín.: </string>
+    <string name="weather_wind">Viento</string>
+    <string name="weather_wind_speed">Velocidad: </string>
+    <string name="weather_wind_deg">Dirección: </string>
+    <string name="weather_connection_error">Error en la conexión</string>
+    <string name="weather_retry">Reintentar</string>
+    <string name="weather_enable_location_explanation">Necesitamos que habilites la ubicación, para poder obtenerla</string>
+    <string name="weather_enable">Habilitar</string>
+    <string name="weather_permission_denied_explanation">Necesitamos que nos des permiso para obtener su ubicación actual</string>
+    <string name="weather_go_to_settings">Ir a configuración</string>
+    <string name="weather_activate_permission">Activar Permiso</string>
+</resources>

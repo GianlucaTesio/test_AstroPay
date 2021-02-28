@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="weather_colorPrimary">#FF6200EE</color>
+    <color name="weather_colorPrimaryDark">#FF3700B3</color>
+    <color name="weather_colorAccent">#FFBB86FC</color>
+    <color name="weather_colorSecondary">#FF03DAC5</color>
+    <color name="weather_colorSecondaryVariant">#FF018786</color>
+    <color name="weather_black">#FF000000</color>
+    <color name="weather_white">#FFFFFFFF</color>
+    <color name="weather_activity_background">#0F999999</color>
+    <color name="weather_cities_spinner_background">#CBE1E0E0</color>
+    <color name="weather_colorLink">#5959DF</color>
+</resources>

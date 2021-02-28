@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/weather_colorPrimary" />
+    <stroke
+        android:width="@dimen/weather_radio_flat_stroke_width"
+        android:color="@color/weather_colorPrimary" />
+</shape>
