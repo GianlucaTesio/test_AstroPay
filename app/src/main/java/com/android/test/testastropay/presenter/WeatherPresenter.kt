@@ -7,41 +7,39 @@ import com.android.test.testastropay.model.WeatherInteractor
 import com.android.test.testastropay.view.WeatherView
 import java.util.ArrayList
 
-class WeatherPresenter constructor(view: WeatherView, weatherInteractor: WeatherInteractor) : BasePresenter() {
+class WeatherPresenter constructor(val view: WeatherView, private val weatherInteractor: WeatherInteractor) : BasePresenter() {
 
-    var view: WeatherView? = null
-    var weatherInteractor: WeatherInteractor? = null
 
     init {
-        this.view = view
-        this.weatherInteractor = weatherInteractor
+        setupSpinnerCities()
     }
 
     fun fetchWeatherDataFromCity(cityName: String) {
-        weatherInteractor?.getWeatherRemoteDataFromCity(object : WeatherInteractor.onDataFetched {
+        weatherInteractor.getWeatherRemoteDataFromCity(object : WeatherInteractor.onDataFetched {
             override fun onSuccess(weatherData: WeatherData) {
-                view?.showWeatherData(weatherData)
+                view.showWeatherData(weatherData)
             }
 
             override fun onFailure() {
-                view?.showFetchError()
+                view.showFetchError()
             }
         }, cityName)
     }
 
     fun fetchWeatherDataFromLatLon(lat: Double, lon: Double) {
-        weatherInteractor?.getWeatherRemoteDataFromLatLon(object : WeatherInteractor.onDataFetched {
+        weatherInteractor.getWeatherRemoteDataFromLatLon(object : WeatherInteractor.onDataFetched {
             override fun onSuccess(weatherData: WeatherData) {
-                view?.showWeatherData(weatherData)
+                view.showWeatherData(weatherData)
             }
 
             override fun onFailure() {
-                view?.showFetchError()
+                view.showFetchError()
             }
         }, lat, lon)
     }
 
-    fun getCitiesWeather(): ArrayList<City> {
-        return weatherInteractor?.getWeatherCities() ?: arrayListOf()
+    private fun setupSpinnerCities() {
+        view.setupSpinnerCities(weatherInteractor.getWeatherCities())
     }
+
 }

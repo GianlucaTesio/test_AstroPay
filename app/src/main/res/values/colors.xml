@@ -7,7 +7,8 @@
     <color name="weather_colorSecondaryVariant">#FF018786</color>
     <color name="weather_black">#FF000000</color>
     <color name="weather_white">#FFFFFFFF</color>
-    <color name="weather_activity_background">#0F999999</color>
+    <color name="weather_grey">#858484</color>
+    <color name="weather_activity_background">#EBE1DFDF</color>
     <color name="weather_cities_spinner_background">#CBE1E0E0</color>
     <color name="weather_colorLink">#5959DF</color>
 </resources>

@@ -9,6 +9,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/weather_ic_launcher"
         android:label="@string/weather_app_name"
+        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/weather_ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/weather_Theme.TestAstroPay">

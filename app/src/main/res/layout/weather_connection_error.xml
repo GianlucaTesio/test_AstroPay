@@ -16,6 +16,7 @@
         android:layout_marginTop="@dimen/weather_primary_text_view_error_margin_top"
         android:layout_marginLeft="@dimen/weather_primary_text_view_error_margin_horizontal"
         android:layout_marginRight="@dimen/weather_primary_text_view_error_margin_horizontal"
+        android:textColor="@color/weather_black"
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:text="@string/weather_connection_error"

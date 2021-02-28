@@ -55,7 +55,6 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         viewSectionList = listOf(llWeatherDetails, llConnectionError, llLocationDisabled, llPermissionDenied)
 
-        setupSpinnerCities()
         setupRadioButton()
         setClickListener()
         getWeather()
@@ -79,16 +78,11 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
         if (showFloatButton) { fbRefresh.visibility = View.VISIBLE } else { fbRefresh.visibility = View.GONE }
     }
 
-    private fun setupSpinnerCities() {
-        mAdapter = CitiesAdapter(this, presenter.getCitiesWeather())
+    override fun setupSpinnerCities(weatherCities: ArrayList<City>) {
+        mAdapter = CitiesAdapter(this, weatherCities)
         spCities.adapter = mAdapter
         spCities.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 getWeather()
             }
 

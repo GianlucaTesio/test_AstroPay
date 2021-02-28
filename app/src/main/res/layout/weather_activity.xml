@@ -95,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/weather_text_location"
+                    android:textColor="@color/weather_black"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/weather_text_size_medium"
                     android:textStyle="bold"
@@ -188,6 +189,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/weather_grey"
                             android:textSize="@dimen/weather_text_size_medium"
                             tools:text="20º" />
                     </LinearLayout>
@@ -214,6 +216,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/weather_grey"
                             android:textSize="@dimen/weather_text_size_medium"
                             tools:text="28º" />
                     </LinearLayout>
@@ -229,6 +232,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:textColor="@color/weather_black"
                         android:text="@string/weather_wind"
                         android:textSize="@dimen/weather_text_size_medium"
                         android:textStyle="bold" />
@@ -253,6 +257,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/weather_grey"
                             android:textAlignment="textStart"
                             tools:text="25 m/s"
                             android:gravity="start" />
@@ -279,6 +284,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/weather_grey"
                             android:textAlignment="textStart"
                             tools:text="25º"
                             android:gravity="start" />
