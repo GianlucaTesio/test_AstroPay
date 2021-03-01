@@ -23,7 +23,7 @@ abstract class BasePresenter protected constructor() {
     }
 
     @CallSuper
-    internal fun onDestroy() {
+    internal open fun onDestroy() {
     }
 
     @CallSuper

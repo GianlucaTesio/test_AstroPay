@@ -14,6 +14,12 @@ interface WeatherView {
 
     fun getWeather()
 
+    fun showLocation(location: String)
+
+    fun showLocationDisabled()
+
+    fun requestPermission(listPermission: Array<String>, permissionRequestcode: Int)
+
     fun showWeatherData(weatherData: WeatherData)
 
     fun showFetchError()

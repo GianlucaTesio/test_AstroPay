@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.Nullable
 import com.android.test.testastropay.R
 import java.util.*
 

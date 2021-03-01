@@ -1,6 +1,5 @@
 package com.android.test.testastropay.base
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle

@@ -1,16 +1,13 @@
 package com.android.test.testastropay.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
-import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.widget.*
@@ -24,8 +21,8 @@ import com.android.test.testastropay.base.BaseActivity
 import com.android.test.testastropay.model.WeatherData
 import com.android.test.testastropay.model.WeatherInteractor
 import com.android.test.testastropay.presenter.WeatherPresenter
+import com.android.test.testastropay.utils.Constants
 import com.android.test.testastropay.utils.Constants.DEGREES
-import com.android.test.testastropay.utils.Constants.STRING_EMPTY
 import com.android.test.testastropay.utils.Constants.UNIT_WIND_SPEED
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -102,8 +99,31 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
             R.id.rbLocation -> {
                 llCitiesSection.visibility = View.GONE
                 llLocationSection.visibility = View.VISIBLE
-                getLocation()
+                presenter.getLocation(ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    getSystemService(Context.LOCATION_SERVICE) as LocationManager,
+                    Geocoder(this, Locale.getDefault()),
+                    fusedLocationClient)
             }
+        }
+    }
+
+    override fun showLocation(location: String) {
+        tvLocation.text = if (location.isEmpty()) {
+            resources.getString(R.string.weather_location_unknown)
+        } else {
+            location
+        }
+    }
+
+    override fun showLocationDisabled() {
+        tvLocation.text = Constants.STRING_EMPTY
+        viewVisibility(llLocationDisabled, true)
+    }
+
+    override fun requestPermission(listPermission: Array<String>, permissionRequestcode: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(listPermission, permissionRequestcode)
         }
     }
 
@@ -137,61 +157,6 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
                 }
                 return
             }
-        }
-    }
-
-    private fun getLocation() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-                val mLocationRequest = LocationRequest.create().apply {
-                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    interval = 10000
-                    fastestInterval = 1000
-                    numUpdates = 1
-                }
-
-                val mLocationCallback: LocationCallback = object : LocationCallback() {
-                    override fun onLocationResult(locationResult: LocationResult) {
-                        fetchWeatherFromLatLon(locationResult.lastLocation)
-                    }
-
-                    @SuppressLint("MissingPermission")
-                    override fun onLocationAvailability(locationAvailability: LocationAvailability) {
-                        if (!locationAvailability.isLocationAvailable) {
-                            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                                location?.let {
-                                    fetchWeatherFromLatLon(it)
-                                }
-                            }
-                        }
-                    }
-                }
-                fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
-            } else {
-                tvLocation.text = STRING_EMPTY
-                viewVisibility(llLocationDisabled, true)
-            }
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-            }
-        }
-    }
-
-    private fun fetchWeatherFromLatLon(location: Location) {
-        presenter.fetchWeatherDataFromLatLon(location.latitude, location.longitude)
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        tvLocation.text = if (
-            addresses.isNotEmpty()) {addresses[0].getAddressLine(0)
-        } else {
-            resources.getString(R.string.weather_location_unknown)
         }
     }
 
