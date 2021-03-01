@@ -44,12 +44,12 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.weather_activity)
-        presenter = WeatherPresenter(this, WeatherInteractor())
-        super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        viewSectionList = listOf(llWeatherDetails, llConnectionError, llLocationDisabled, llPermissionDenied)
+        presenter = WeatherPresenter(this, WeatherInteractor(), fusedLocationClient,
+            Geocoder(this, Locale.getDefault()), getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        super.onCreate(savedInstanceState)
 
-        presenter.getWeather()
+        viewSectionList = listOf(llWeatherDetails, llConnectionError, llLocationDisabled, llPermissionDenied)
     }
 
     override fun setClickListener() {
@@ -89,23 +89,26 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
         }
     }
 
-    override fun getWeather() {
-        when (rgSourceSelector.checkedRadioButtonId) {
-            R.id.rbCities -> {
-                llLocationSection.visibility = View.GONE
-                llCitiesSection.visibility = View.VISIBLE
-                presenter.fetchWeatherDataFromCity((spCities.selectedItem as City).countryName)
-            }
-            R.id.rbLocation -> {
-                llCitiesSection.visibility = View.GONE
-                llLocationSection.visibility = View.VISIBLE
-                presenter.getLocation(ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    getSystemService(Context.LOCATION_SERVICE) as LocationManager,
-                    Geocoder(this, Locale.getDefault()),
-                    fusedLocationClient)
-            }
-        }
+    override fun checkSelfPermission(permission: String): Int{
+        return ContextCompat.checkSelfPermission(this, permission)
+    }
+
+    override fun isLocationActivated(): Boolean {
+        return rgSourceSelector.checkedRadioButtonId == R.id.rbLocation
+    }
+
+    override fun showLocationSection() {
+        llCitiesSection.visibility = View.GONE
+        llLocationSection.visibility = View.VISIBLE
+    }
+
+    override fun showCitiesSection() {
+        llLocationSection.visibility = View.GONE
+        llCitiesSection.visibility = View.VISIBLE
+    }
+
+    override fun getCitySelected(): City {
+        return spCities.selectedItem as City
     }
 
     override fun showLocation(location: String) {
@@ -128,15 +131,12 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty()) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        getWeather()
+                        presenter.getWeather()
                     }
                     if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                         if (!shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -149,7 +149,7 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
                         } else {
                             tvGoToSettings.text = resources.getString(R.string.weather_activate_permission)
                             tvGoToSettings.setOnClickListener {
-                                getWeather()
+                                presenter.getWeather()
                             }
                         }
                         viewVisibility(llPermissionDenied, true)

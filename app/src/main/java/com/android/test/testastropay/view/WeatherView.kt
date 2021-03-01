@@ -12,7 +12,15 @@ interface WeatherView {
 
     fun setClickListener()
 
-    fun getWeather()
+    fun isLocationActivated(): Boolean
+
+    fun showLocationSection()
+
+    fun showCitiesSection()
+
+    fun getCitySelected(): City
+
+    fun checkSelfPermission(permission: String): Int
 
     fun showLocation(location: String)
 

@@ -15,9 +15,12 @@ import com.google.android.gms.location.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-class WeatherPresenter constructor(
+class WeatherPresenter(
     private val view: WeatherView,
-    private val weatherInteractor: WeatherInteractor
+    private val weatherInteractor: WeatherInteractor,
+    private val fusedLocationClient: FusedLocationProviderClient,
+    private val geocoder: Geocoder,
+    private val locationManager: LocationManager
 ) : BasePresenter() {
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -25,6 +28,7 @@ class WeatherPresenter constructor(
         setupSpinnerCities()
         setupRadioButton()
         setClickListener()
+        getWeather()
     }
 
     fun fetchWeatherDataFromCity(cityName: String) {
@@ -49,57 +53,6 @@ class WeatherPresenter constructor(
         compositeDisposable.add(disposable)
     }
 
-    @SuppressLint("MissingPermission")
-    fun getLocation(
-        checkSelfLocationPermission: Int,
-        locationManager: LocationManager,
-        geocoder: Geocoder,
-        fusedLocationClient: FusedLocationProviderClient
-    ) {
-        if (checkSelfLocationPermission == PackageManager.PERMISSION_GRANTED
-        ) {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-                val mLocationRequest = LocationRequest.create().apply {
-                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    interval = 10000
-                    fastestInterval = 1000
-                    numUpdates = 1
-                }
-
-                val mLocationCallback: LocationCallback = object : LocationCallback() {
-                    override fun onLocationResult(locationResult: LocationResult) {
-                        fetchWeatherDataFromLatLon(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
-
-                        val addresses = geocoder.getFromLocation(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude, 1)
-                        view.showLocation(if (addresses.isEmpty()) {
-                            STRING_EMPTY
-                        } else {
-                            addresses[0].getAddressLine(0)
-                        })
-                    }
-
-                    @SuppressLint("MissingPermission")
-                    override fun onLocationAvailability(locationAvailability: LocationAvailability) {
-                        if (!locationAvailability.isLocationAvailable) {
-                            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                                location?.let {
-                                    fetchWeatherDataFromLatLon(it.latitude, it.longitude)
-                                }
-                            }
-                        }
-                    }
-                }
-                fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
-            } else {
-                view.showLocationDisabled()
-            }
-        } else {
-            view.requestPermission(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-        }
-    }
-
     override fun onDestroy(){
         super.onDestroy()
         compositeDisposable.dispose()
@@ -117,7 +70,55 @@ class WeatherPresenter constructor(
         view.setClickListener()
     }
 
+    @SuppressLint("MissingPermission")
     fun getWeather() {
-        view.getWeather()
+        if (view.isLocationActivated()){
+            view.showLocationSection()
+            if (view.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ) {
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+                    val mLocationRequest = LocationRequest.create().apply {
+                        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                        interval = 10000
+                        fastestInterval = 1000
+                        numUpdates = 1
+                    }
+
+                    val mLocationCallback: LocationCallback = object : LocationCallback() {
+                        override fun onLocationResult(locationResult: LocationResult) {
+                            fetchWeatherDataFromLatLon(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
+
+                            val addresses = geocoder.getFromLocation(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude, 1)
+                            view.showLocation(if (addresses.isEmpty()) {
+                                STRING_EMPTY
+                            } else {
+                                addresses[0].getAddressLine(0)
+                            })
+                        }
+
+                        override fun onLocationAvailability(locationAvailability: LocationAvailability) {
+                            if (!locationAvailability.isLocationAvailable) {
+                                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                                    location?.let {
+                                        fetchWeatherDataFromLatLon(it.latitude, it.longitude)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+                } else {
+                    view.showLocationDisabled()
+                }
+            } else {
+                view.requestPermission(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+            }
+
+        } else {
+            view.showCitiesSection()
+            fetchWeatherDataFromCity(view.getCitySelected().countryName)
+        }
     }
 }

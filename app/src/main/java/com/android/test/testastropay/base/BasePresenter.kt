@@ -7,31 +7,31 @@ import androidx.annotation.CallSuper
 abstract class BasePresenter protected constructor() {
 
     @CallSuper
-    internal fun onCreate(savedInstanceState: Bundle?) {
+    open fun onCreate(savedInstanceState: Bundle?) {
     }
 
     @CallSuper
-    internal fun onResume() {
+    open fun onResume() {
     }
 
     @CallSuper
-    internal fun onPause() {
+    open fun onPause() {
     }
 
     @CallSuper
-    internal fun onSaveInstanceState(outState: Bundle) {
+    open fun onSaveInstanceState(outState: Bundle) {
     }
 
     @CallSuper
-    internal open fun onDestroy() {
+    open fun onDestroy() {
     }
 
     @CallSuper
-    internal fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     }
 
     @CallSuper
-    internal fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+    open fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
     }
 }
