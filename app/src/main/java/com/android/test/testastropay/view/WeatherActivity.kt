@@ -45,30 +45,25 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
     private var mAdapter: CitiesAdapter? = null
     private var viewSectionList = listOf<View>()
 
-    override fun createPresenter(context: Context): WeatherPresenter {
-        return WeatherPresenter(this, WeatherInteractor())
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.weather_activity)
+        presenter = WeatherPresenter(this, WeatherInteractor())
+        super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         viewSectionList = listOf(llWeatherDetails, llConnectionError, llLocationDisabled, llPermissionDenied)
 
-        setupRadioButton()
-        setClickListener()
-        getWeather()
+        presenter.getWeather()
     }
 
-    private fun setClickListener() {
+    override fun setClickListener() {
         tvRetry.setOnClickListener {
-            getWeather()
+            presenter.getWeather()
         }
         tvEnableLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
         fbRefresh.setOnClickListener {
-            getWeather()
+            presenter.getWeather()
         }
     }
 
@@ -83,21 +78,21 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
         spCities.adapter = mAdapter
         spCities.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                getWeather()
+                presenter.getWeather()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun setupRadioButton() {
+    override fun setupRadioButton() {
         rgSourceSelector.setOnCheckedChangeListener { _, _ ->
             viewVisibility(null, false)
-            getWeather()
+            presenter.getWeather()
         }
     }
 
-    private fun getWeather() {
+    override fun getWeather() {
         when (rgSourceSelector.checkedRadioButtonId) {
             R.id.rbCities -> {
                 llLocationSection.visibility = View.GONE
@@ -121,7 +116,7 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
             PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty()) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        getLocation()
+                        getWeather()
                     }
                     if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                         if (!shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -193,7 +188,11 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
         presenter.fetchWeatherDataFromLatLon(location.latitude, location.longitude)
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        tvLocation.text = addresses[0].getAddressLine(0)
+        tvLocation.text = if (
+            addresses.isNotEmpty()) {addresses[0].getAddressLine(0)
+        } else {
+            resources.getString(R.string.weather_location_unknown)
+        }
     }
 
     override fun showWeatherData(weatherData: WeatherData) {

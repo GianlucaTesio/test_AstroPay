@@ -10,11 +10,8 @@ abstract class BaseActivity<Presenter : BasePresenter> : AppCompatActivity() {
 
     protected lateinit var presenter: Presenter
 
-    protected abstract fun createPresenter(context: Context): Presenter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = createPresenter(this)
         presenter.onCreate(savedInstanceState)
     }
 

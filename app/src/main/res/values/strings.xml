@@ -15,4 +15,5 @@
     <string name="weather_permission_denied_explanation">Necesitamos que nos des permiso para obtener su ubicación actual</string>
     <string name="weather_go_to_settings">Ir a configuración</string>
     <string name="weather_activate_permission">Activar Permiso</string>
+    <string name="weather_location_unknown">Desconocida</string>
 </resources>

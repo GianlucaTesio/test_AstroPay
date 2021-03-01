@@ -8,6 +8,12 @@ interface WeatherView {
 
     fun setupSpinnerCities(weatherCities: ArrayList<City>)
 
+    fun setupRadioButton()
+
+    fun setClickListener()
+
+    fun getWeather()
+
     fun showWeatherData(weatherData: WeatherData)
 
     fun showFetchError()
