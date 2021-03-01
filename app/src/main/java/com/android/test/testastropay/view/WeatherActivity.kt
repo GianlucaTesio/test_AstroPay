@@ -22,8 +22,6 @@ import com.android.test.testastropay.model.WeatherData
 import com.android.test.testastropay.model.WeatherInteractor
 import com.android.test.testastropay.presenter.WeatherPresenter
 import com.android.test.testastropay.utils.Constants
-import com.android.test.testastropay.utils.Constants.DEGREES
-import com.android.test.testastropay.utils.Constants.UNIT_WIND_SPEED
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.*
@@ -43,13 +41,14 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
     private var viewSectionList = listOf<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.weather_activity)
+        viewSectionList = listOf(llWeatherDetails, llConnectionError, llLocationDisabled, llPermissionDenied)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         presenter = WeatherPresenter(this, WeatherInteractor(), fusedLocationClient,
             Geocoder(this, Locale.getDefault()), getSystemService(Context.LOCATION_SERVICE) as LocationManager)
-        super.onCreate(savedInstanceState)
 
-        viewSectionList = listOf(llWeatherDetails, llConnectionError, llLocationDisabled, llPermissionDenied)
     }
 
     override fun setClickListener() {
@@ -64,7 +63,7 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
         }
     }
 
-    private fun viewVisibility(viewVisible: View?, showFloatButton: Boolean) {
+    private fun showViewAndHideAnother(viewVisible: View?, showFloatButton: Boolean) {
         viewSectionList.filterNot { view -> view == viewVisible }.forEach { view -> view.visibility = View.GONE }
         viewVisible?.visibility = View.VISIBLE
         if (showFloatButton) { fbRefresh.visibility = View.VISIBLE } else { fbRefresh.visibility = View.GONE }
@@ -84,7 +83,7 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
 
     override fun setupRadioButton() {
         rgSourceSelector.setOnCheckedChangeListener { _, _ ->
-            viewVisibility(null, false)
+            showViewAndHideAnother(null, false)
             presenter.getWeather()
         }
     }
@@ -121,7 +120,7 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
 
     override fun showLocationDisabled() {
         tvLocation.text = Constants.STRING_EMPTY
-        viewVisibility(llLocationDisabled, true)
+        showViewAndHideAnother(llLocationDisabled, true)
     }
 
     override fun requestPermission(listPermission: Array<String>, permissionRequestcode: Int) {
@@ -152,34 +151,28 @@ class WeatherActivity : BaseActivity<WeatherPresenter>(), WeatherView {
                                 presenter.getWeather()
                             }
                         }
-                        viewVisibility(llPermissionDenied, true)
+                        showViewAndHideAnother(llPermissionDenied, true)
                     }
                 }
-                return
             }
         }
     }
 
     override fun showWeatherData(weatherData: WeatherData) {
-        viewVisibility(llWeatherDetails, true)
-        val currentTemp = "${weatherData.main.currentTemp.toInt()}${DEGREES}"
-        tvTemp.text = currentTemp
+        showViewAndHideAnother(llWeatherDetails, true)
         val imageUrl = BASE_URL_IMAGES + weatherData.weather[0].icon + IMAGES_EXTENSION
         Glide.with(applicationContext)
             .load(imageUrl)
             .apply(RequestOptions.centerCropTransform())
             .into(ivWeather)
-        val minTemp = "${weatherData.main.minTemp.toInt()}${DEGREES}"
-        tvTempMin.text = minTemp
-        val maxTemp = "${weatherData.main.maxTemp.toInt()}${DEGREES}"
-        tvTempMax.text = maxTemp
-        val windSpeed = "${weatherData.wind.speed}${UNIT_WIND_SPEED}"
-        tvWindSpeed.text = windSpeed
-        val windDeg = "${weatherData.wind.deg.toInt()}${DEGREES}"
-        tvWindDeg.text = windDeg
+        tvTemp.text = getString(R.string.weather_temp_value, weatherData.main.currentTemp.toInt().toString())
+        tvTempMin.text = getString(R.string.weather_temp_value, weatherData.main.minTemp.toInt().toString())
+        tvTempMax.text = getString(R.string.weather_temp_value, weatherData.main.maxTemp.toInt().toString())
+        tvWindSpeed.text = getString(R.string.weather_wind_speed_value, weatherData.wind.speed.toString())
+        tvWindDeg.text =  getString(R.string.weather_wind_deg_value, weatherData.wind.deg.toInt().toString())
     }
 
     override fun showFetchError() {
-        viewVisibility(llConnectionError, false)
+        showViewAndHideAnother(llConnectionError, false)
     }
 }

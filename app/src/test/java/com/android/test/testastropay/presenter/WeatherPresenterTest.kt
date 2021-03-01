@@ -13,31 +13,34 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.Spy
 
 class WeatherPresenterTest {
     private lateinit var weatherData: WeatherData
 
     @Mock
-    private var view: WeatherView = mock(WeatherView::class.java)
+    private lateinit var view: WeatherView
 
     @Mock
-    private var interactor: WeatherInteractor = mock(WeatherInteractor::class.java)
+    private lateinit var interactor: WeatherInteractor
 
     @Mock
-    private var fusedLocationProviderClient: FusedLocationProviderClient = mock(FusedLocationProviderClient::class.java)
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @Mock
-    private var geocoder: Geocoder = mock(Geocoder::class.java)
+    private lateinit var geocoder: Geocoder
 
     @Mock
-    private var locationManager: LocationManager = mock(LocationManager::class.java)
+    private lateinit var locationManager: LocationManager
 
-    @Spy
     private lateinit var presenter: WeatherPresenter
 
     @Before
     fun setUp() {
+        view = mock(WeatherView::class.java)
+        interactor = mock(WeatherInteractor::class.java)
+        fusedLocationProviderClient = mock(FusedLocationProviderClient::class.java)
+        geocoder = mock(Geocoder::class.java)
+        locationManager = mock(LocationManager::class.java)
         weatherData = getWeatherDataMock()
     }
 

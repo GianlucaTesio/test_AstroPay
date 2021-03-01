@@ -16,4 +16,7 @@
     <string name="weather_go_to_settings">Ir a configuración</string>
     <string name="weather_activate_permission">Activar Permiso</string>
     <string name="weather_location_unknown">Desconocida</string>
+    <string name="weather_wind_speed_value">%1$s m/s</string>
+    <string name="weather_temp_value">%1$sº</string>
+    <string name="weather_wind_deg_value">%1$sº</string>
 </resources>

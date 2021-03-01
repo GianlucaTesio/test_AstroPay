@@ -11,7 +11,6 @@ abstract class BaseActivity<Presenter : BasePresenter> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter.onCreate(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
