@@ -1,7 +1,7 @@
 # Test AstroPay
 
 ## Weather App
-Weather es un app mobil para dispositivos android comprendidos entre la versión 4.1 y 9.0, en la cual se puede visualizar el clima de diferentes ciudades(Montevideo, Londres, San Pablo, Buenos Aires y Munich) y a su vez se puede utilizar la localización actual para visualizarlo en donde te encuentres.
+Weather es un app móvil para dispositivos android comprendidos entre la versión 4.1 y 9.0, en la cual se puede visualizar el clima de diferentes ciudades(Montevideo, Londres, San Pablo, Buenos Aires y Munich) y a su vez se puede utilizar la localización actual para visualizarlo en donde te encuentres.
 
 ## Screenshots 
 Ciudades|Ubicación
